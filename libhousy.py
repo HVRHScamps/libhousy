@@ -87,7 +87,7 @@ class robot:
     #the students making direct calls to the sense HAT because that could break other stuff
     #so we're stuck with these dumb abstractions (and yes they could just make direct robot.HAT calls
     # but I'm not going to tell them about that and hope they won't read this comment lol)
-    def getYaw(self):
+    def getYaw(self): #TODO: these are probably not accurate to how the board will be mounted in the robot
         '''returns the yaw (side-to-side pivot) of the robot in degrees''' 
         return self.HAT.get_orientation_degrees()["yaw"]
     def getRoll(self):
@@ -95,7 +95,7 @@ class robot:
         return self.HAT.get_orientation_degrees()["roll"]
     def getPitch(self):
         '''returns the pitch (front-back tilt) of the robot in degrees''' 
-        return self.HAT.get_orientation_degrees()["pitch"]name
+        return self.HAT.get_orientation_degrees()["pitch"]
     def getAcceleration(self,axis: string):
         '''returns the acceleration in Gs for the specified axis. Valid inputs: "x", "y", "z".
         Note that the qoutation marks are required!'''
