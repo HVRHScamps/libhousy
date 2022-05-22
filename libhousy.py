@@ -1,7 +1,7 @@
 import string
 from networktables import NetworkTables
 import random
-from sense_hat import SenseHat
+from sense_emu import SenseHat
 
 class motor:
     '''abstraction for FRC motor controller / motor controller group'''
