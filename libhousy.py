@@ -1,7 +1,7 @@
 import string
 from networktables import NetworkTables
 import random
-from sense_hat import SenseHat
+from sense_emu import SenseHat
 
 class motor:
     '''abstraction for FRC motor controller / motor controller group'''
@@ -14,6 +14,14 @@ class motor:
         if abs(value) > 1: raise ValueError("Out of range input supplied!!")
         else: self.control.putNumber(self.name,value)
 
+class servo:
+    def __init__(self,name: string):
+        self.name = name
+        self.control = NetworkTables.getTable("control")
+    def Set(self,value: int)
+        '''sets the servo to a specified angle in degrees. Valid inputs are 0-180.'''
+        if value > 180 or value < 0: raise ValueError("Out of range input supplied!!")
+        else: self.control.putNumber(self.name,value)
 class pneumatic:
     '''abstraction for FRC Double Solenoid class'''
     def __init__(self, name: string):
@@ -70,6 +78,8 @@ class robot:
         '''a relay, not a pneumatic but they behave the same way. call Extend or Retract until it's at a good angle then call Stop'''
         self.pickupMotor = motor("pickupM")
         self.colorPanelMotor = motor("clrPnlM")
+        self.climber = motor("climber")
+        self.climbServo = servo("climberServo")
         # sensors
         self.shootEncoder = encoder("shootEncoder",1)
         self.lDriveEncoder = encoder("driveEncoderL",2)
