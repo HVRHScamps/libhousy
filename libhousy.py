@@ -66,6 +66,8 @@ class robot:
         self.beltZ2 = motor("beltZ2")
         self.beltZ3 = motor("beltZ3")
         self.shootWheel = motor("shootWhl")
+        self.shootAngle = pneumatic("shootPos") 
+        '''a relay, not a pneumatic but they behave the same way. call Extend or Retract until it's at a good angle then call Stop'''
         self.pickupMotor = motor("pickupM")
         self.colorPanelMotor = motor("clrPnlM")
         # sensors
