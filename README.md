@@ -6,7 +6,7 @@ Actuators are anything that moves on the robot, including all motors and pneumat
 ### Motors
 Motors like the drivetrain (wheels) can be `Set` to any value between -1 and 1 where -1 is full reverse, 0 is stopped, and 1 is forward. 
 
-### Pistons≈
+### Pistons
 Pistons are useful for linear motion (like the pickup arm) but can only be fully extended or retracted. To move a piston call its associated `Extend()` or `Retract()` function.
 
 ### Examples
