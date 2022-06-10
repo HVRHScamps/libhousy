@@ -26,6 +26,7 @@ class servo:
 class pneumatic:
     '''abstraction for FRC Double Solenoid class'''
     def __init__(self, name: string):
+        self.name = name
         self.control = NetworkTables.getTable("control")
     def Extend(self):
         '''sets pneumatic to kForward'''
