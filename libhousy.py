@@ -1,13 +1,14 @@
 import string
 from networktables import NetworkTables
 import random
-from sense_emu import SenseHat as fSense
-from sense_hat import SenseHat
+#from sense_emu import SenseHat as fSense
+#from sense_hat import SenseHat
 
 class motor:
     '''abstraction for FRC motor controller / motor controller group'''
     def __init__(self,name: string):
         self.name = name
+        NetworkTables.initialize(server="10.20.22.2")
         self.control = NetworkTables.getTable("control")
     def Set(self,value: int):
         '''Sets motor speed in a range from -1 to 1
@@ -27,6 +28,7 @@ class pneumatic:
     '''abstraction for FRC Double Solenoid class'''
     def __init__(self, name: string):
         self.control = NetworkTables.getTable("control")
+        self.name = name
     def Extend(self):
         '''sets pneumatic to kForward'''
         self.control.putNumber(self.name,1)
@@ -124,7 +126,7 @@ class robot:
         self.control = NetworkTables.getTable("control")
         self.sensors = NetworkTables.getTable("sensors")
         if (fake):
-            self.HAT = fSense()
+            #self.HAT = fSense()
             # motors
             self.lDrive = fmotor("driveL")
             self.rDrive = fmotor("driveR")
@@ -150,7 +152,7 @@ class robot:
             self.lowerTension = fpneumatic("lTensPNM")
             self.upperTension = fpneumatic("uTensPNM")
         else:
-            self.HAT = SenseHat()
+            #self.HAT = SenseHat()
             # motors
             self.lDrive = motor("driveL")
             self.rDrive = motor("driveR")
@@ -184,16 +186,3 @@ class robot:
     #the students making direct calls to the sense HAT because that could break other stuff
     #so we're stuck with these dumb abstractions (and yes they could just make direct robot.HAT calls
     # but I'm not going to tell them about that and hope they won't read this comment lol)
-    def getYaw(self): #TODO: these are probably not accurate to how the board will be mounted in the robot
-        '''returns the yaw (side-to-side pivot) of the robot in degrees''' 
-        return self.HAT.get_orientation_degrees()["yaw"]
-    def getRoll(self):
-        '''returns the roll (side-to-side tilt) of the robot in degrees''' 
-        return self.HAT.get_orientation_degrees()["roll"]
-    def getPitch(self):
-        '''returns the pitch (front-back tilt) of the robot in degrees''' 
-        return self.HAT.get_orientation_degrees()["pitch"]
-    def getAcceleration(self,axis: string):
-        '''returns the acceleration in Gs for the specified axis. Valid inputs: "x", "y", "z".
-        Note that the qoutation marks are required!'''
-        return self.HAT.get_accelerometer_raw()[axis.lower()]
