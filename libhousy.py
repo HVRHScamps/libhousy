@@ -265,6 +265,7 @@ class fSenseHat:
 
 class robot:
     def __init__(self, fake=False):
+        NetworkTables.initialize(server="roborio-2022-frc.local")
         self.control = NetworkTables.getTable("control")
         self.sensors = NetworkTables.getTable("sensors")
         if fake:
