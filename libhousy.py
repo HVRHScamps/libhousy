@@ -90,6 +90,7 @@ class colorSensor:
 
 class controller:
     def __init__(self):
+        pygame.joystick.init()
         self.backend = pygame.joystick.Joystick(0)
         self.backend.init()
 
