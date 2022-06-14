@@ -3,8 +3,6 @@ from networktables import NetworkTables
 import random
 import pygame
 import enum
-from sense_emu import SenseHat as fSense
-from sense_hat import SenseHat
 
 
 class motor:
@@ -133,6 +131,30 @@ class controller:
         return self.backend.get_hat(0)
 
 
+class SenseHat:
+    def __init__(self):
+        self.sensors = NetworkTables.getTable("sensors")
+        self.control = NetworkTables.getTable("control")
+    def set_display(self, val: int):
+        self.control.putNumber("shDisplay", val)
+
+    def get_yaw(self):
+        """returns the yaw (side to side turn) value from the sense hat's IMU"""
+        return self.sensors.getNumber("shYaw", 0)
+
+    def get_roll(self):
+        """returns the roll (sid to side tilt) value from the sense hat's IMU"""
+        return self.sensors.getNumber("shRoll", 0)
+
+    def get_pitch(self):
+        """returns the pitch (front to back tilt) value from the sense hat's IMU"""
+        return self.sensors.getNumber("shPitch", 0)
+
+    def get_accel(self):
+        """returns a tupple of the robot's acceleration in each axis"""
+        return self.sensors.getNumberArray("shAccel", [0, 0, 0])
+
+
 class fmotor:
     """abstraction for FRC motor controller / motor controller group"""
 
@@ -214,12 +236,37 @@ class fcolorSensor:
         return self.prox
 
 
+class fSenseHat:
+    disp = 0
+    roll = 0
+    pitch = 0
+    yaw = 0
+    accel = [0, 0, 0]
+
+    def set_display(self, val: int):
+        self.disp = val
+
+    def get_yaw(self):
+        """returns the yaw (side to side turn) value from the sense hat's IMU"""
+        return self.yaw
+
+    def get_roll(self):
+        """returns the roll (sid to side tilt) value from the sense hat's IMU"""
+        return self.roll
+
+    def get_pitch(self):
+        """returns the pitch (front to back tilt) value from the sense hat's IMU"""
+        return self.pitch
+
+    def get_accel(self):
+        """returns a tupple of the robot's acceleration in each axis"""
+        return self.accel
+
 class robot:
     def __init__(self, fake=False):
         self.control = NetworkTables.getTable("control")
         self.sensors = NetworkTables.getTable("sensors")
         if fake:
-            self.HAT = fSense()
             # motors
             self.lDrive = fmotor("driveL")
             self.rDrive = fmotor("driveR")
@@ -240,14 +287,13 @@ class robot:
             self.rDriveEncoder = fencoder("driveEncoderR", 3)
             self.shootCounter = fencoder("shootCounter", 4)  # not technically an encoder
             self.colorSensor = fcolorSensor()
+            self.sense_hat = fSenseHat()
             # Pneumatics
             self.colorPanelPneumatic = fpneumatic("clrPnlPNM")
             self.pickupPneumatic = fpneumatic("pickupPNM")
             self.lowerTension = fpneumatic("lTensPNM")
             self.upperTension = fpneumatic("uTensPNM")
         else:
-            pygame.init()
-            self.HAT = SenseHat()
             # motors
             self.lDrive = motor("driveL")
             self.rDrive = motor("driveR")
@@ -268,6 +314,7 @@ class robot:
             self.rDriveEncoder = encoder("driveEncoderR", 3)
             self.shootCounter = encoder("shootCounter", 4)  # not technically an encoder
             self.colorSensor = colorSensor()
+            self.sense_hat = SenseHat()
             # Pneumatics
             self.colorPanelPneumatic = pneumatic("clrPnlPNM")
             self.pickupPneumatic = pneumatic("pickupPNM")
@@ -277,24 +324,3 @@ class robot:
     def keepAlive(self):
         """feeds the RoboRio's watchdog to keep the robot enabled. This MUST be called every loop"""
         self.control.putNumber("deadman", random.random())
-
-    # The following functions may seem useless and they kind of are but I don't want
-    # the students making direct calls to the sense HAT because that could break other stuff
-    # so we're stuck with these dumb abstractions (and yes they could just make direct robot.HAT calls
-    # but I'm not going to tell them about that and hope they won't read this comment lol)
-    def getYaw(self):  # TODO: these are probably not accurate to how the board will be mounted in the robot
-        """returns the yaw (side-to-side pivot) of the robot in degrees"""
-        return self.HAT.get_orientation_degrees()["yaw"]
-
-    def getRoll(self):
-        """returns the roll (side-to-side tilt) of the robot in degrees"""
-        return self.HAT.get_orientation_degrees()["roll"]
-
-    def getPitch(self):
-        """returns the pitch (front-back tilt) of the robot in degrees"""
-        return self.HAT.get_orientation_degrees()["pitch"]
-
-    def getAcceleration(self, axis: string):
-        """returns the acceleration in Gs for the specified axis. Valid inputs: "x", "y", "z".
-        Note that the qoutation marks are required!"""
-        return self.HAT.get_accelerometer_raw()[axis.lower()]
