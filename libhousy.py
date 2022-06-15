@@ -97,23 +97,24 @@ class controller:
     class Button(enum.Enum):
         A = 0
         B = 1
-        X = 2
-        Y = 3
-        lBumper = 4
-        rBumper = 5
-        menu = 6
-        hamburger = 7
-        xbox = 8
-        lStick = 9
-        rStick = 10
+        X = 3
+        Y = 4
+        lBumper = 6
+        rBumper = 7
+        menu = 10
+        hamburger = 11
+        xbox = 12
+        lStick = 13
+        rStick = 14
+        save = 15
 
     class Axis(enum.Enum):
         lStickX = 0
         lStickY = 1
-        lTrigger = 2
-        rStickX = 3
-        rStickY = 4
-        rTrigger = 5
+        lTrigger = 5
+        rStickX = 2
+        rStickY = 3
+        rTrigger = 4
 
     def getButton(self, button: Button):
         """Returns boolean button status of provided button. Ex: controller.getButton(controller.Button.menu) """
