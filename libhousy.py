@@ -4,6 +4,7 @@ import random
 import pygame
 import enum
 
+DONE = 2
 
 class motor:
     """abstraction for FRC motor controller / motor controller group"""
@@ -11,6 +12,7 @@ class motor:
     def __init__(self, name: string):
         self.name = name
         self.control = NetworkTables.getTable("control")
+
 
     def Set(self, value: int):
         """Sets motor speed in a range from -1 to 1
