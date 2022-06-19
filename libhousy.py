@@ -266,6 +266,49 @@ class fSenseHat:
         """returns a tupple of the robot's acceleration in each axis"""
         return self.accel
 
+class fcontroller:
+    def __init__(self):
+        self.buttons = []
+        self.axes = []
+        for i in range(0, 16):
+            self.buttons.append(False)
+        for i in range(0, 6):
+            self.axes.append(0.0)
+        self.hat = (0, 0)
+
+    class Button(enum.Enum):
+        A = 0
+        B = 1
+        X = 3
+        Y = 4
+        lBumper = 6
+        rBumper = 7
+        menu = 10
+        hamburger = 11
+        xbox = 12
+        lStick = 13
+        rStick = 14
+        save = 15
+
+    class Axis(enum.Enum):
+        lStickX = 0
+        lStickY = 1
+        lTrigger = 5
+        rStickX = 2
+        rStickY = 3
+        rTrigger = 4
+
+    def getButton(self, button: Button):
+        """Returns boolean button status of provided button. Ex: controller.getButton(controller.Button.menu) """
+        return self.buttons[button.value]
+
+    def getAxis(self, axis: Axis):
+        """returns value of specified axis from -1 to 1"""
+        return self.axes[axis.value]
+
+    def getHat(self):
+        return self.hat
+
 class robot:
     def __init__(self, fake=False):
         NetworkTables.initialize(server="roborio-2022-frc.local")
@@ -298,6 +341,7 @@ class robot:
             self.pickupPneumatic = fpneumatic("pickupPNM")
             self.lowerTension = fpneumatic("lTensPNM")
             self.upperTension = fpneumatic("uTensPNM")
+            self.controller = fcontroller()
         else:
             # motors
             self.lDrive = motor("driveL")
@@ -325,6 +369,7 @@ class robot:
             self.pickupPneumatic = pneumatic("pickupPNM")
             self.lowerTension = pneumatic("lTensPNM")
             self.upperTension = pneumatic("uTensPNM")
+            self.controller = controller()
 
     def keepAlive(self):
         """feeds the RoboRio's watchdog to keep the robot enabled. This MUST be called every loop"""
