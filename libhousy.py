@@ -147,7 +147,7 @@ class SenseHat:
         retn = self.sensors.getNumber("shYaw", 0)
         if retn > 180:
             retn = retn - 360
-        return self.sensors.getNumber("shYaw", 0)
+        return retn
 
     def get_roll(self):
         """returns the roll (sid to side tilt) value from the sense hat's IMU"""
