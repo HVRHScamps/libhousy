@@ -6,13 +6,13 @@ import enum
 
 DONE = 2
 
+
 class motor:
     """abstraction for FRC motor controller / motor controller group"""
 
     def __init__(self, name: string):
         self.name = name
         self.control = NetworkTables.getTable("control")
-
 
     def Set(self, value: int):
         """Sets motor speed in a range from -1 to 1
@@ -139,27 +139,25 @@ class SenseHat:
     def __init__(self):
         self.sensors = NetworkTables.getTable("sensors")
         self.control = NetworkTables.getTable("control")
+
     def set_display(self, val: int):
         self.control.putNumber("shDisplay", val)
 
     def get_yaw(self):
-        """returns the yaw (side to side turn) value from the sense hat's IMU"""
-        retn = self.sensors.getNumber("shYaw", 0)
-        if retn > 180:
-            retn = retn - 360
-        return retn
+        """returns the yaw (side to side turn) value from the robot's IMU"""
+        return self.sensors.getNumber("navx_yaw", 0)
 
     def get_roll(self):
-        """returns the roll (sid to side tilt) value from the sense hat's IMU"""
-        return self.sensors.getNumber("shRoll", 0)
+        """returns the roll (sid to side tilt) value from the robot's IMU"""
+        return self.sensors.getNumber("navx_roll", 0)
 
     def get_pitch(self):
-        """returns the pitch (front to back tilt) value from the sense hat's IMU"""
-        return self.sensors.getNumber("shPitch", 0)
+        """returns the pitch (front to back tilt) value from the robot's IMU"""
+        return self.sensors.getNumber("navx_pitch", 0)
 
     def get_accel(self):
         """returns a tupple of the robot's acceleration in each axis"""
-        return self.sensors.getNumberArray("shAccel", [0, 0, 0])
+        return self.sensors.getNumberArray("acceleration", [0, 0, 0])
 
 
 class fmotor:
@@ -269,6 +267,7 @@ class fSenseHat:
         """returns a tupple of the robot's acceleration in each axis"""
         return self.accel
 
+
 class fcontroller:
     def __init__(self):
         self.buttons = []
@@ -311,6 +310,7 @@ class fcontroller:
 
     def getHat(self):
         return self.hat
+
 
 class robot:
     def __init__(self, fake=False):
