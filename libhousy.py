@@ -144,6 +144,9 @@ class SenseHat:
 
     def get_yaw(self):
         """returns the yaw (side to side turn) value from the sense hat's IMU"""
+        retn = self.sensors.getNumber("shYaw", 0)
+        if retn > 180:
+            retn = retn - 360
         return self.sensors.getNumber("shYaw", 0)
 
     def get_roll(self):
