@@ -14,7 +14,7 @@ class motor:
         self.name = name
         self.control = NetworkTables.getTable("control")
 
-    def Set(self, value: int):
+    def Set(self, value: float):
         """Sets motor speed in a range from -1 to 1
         where -1 is full reverse, 1 is full forward, and 0 is stopped"""
         if abs(value) > 1:
@@ -167,7 +167,7 @@ class fmotor:
         self.name = name
         self.value = 0
 
-    def Set(self, value: int):
+    def Set(self, value: float):
         """Sets motor speed in a range from -1 to 1
         where -1 is full reverse, 1 is full forward, and 0 is stopped"""
         if abs(value) > 1:
